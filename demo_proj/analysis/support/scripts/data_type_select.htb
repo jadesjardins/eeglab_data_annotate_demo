@@ -6,11 +6,11 @@ EEG = eeg_checkset( EEG );
 tmp.EEG=pop_marks_select_data(EEG,'time marks',[],'labels',{'type-1','type-2','types-3'},'gui','off');
 
 %%SAVE *t1to3.set FILE...
-EEG=pop_saveset(tmp.EEG,'filename','[batch_dfn,.,-1]_t1to3.set','filepath','analysis/data/types1to3_output_files');
+save('analysis/data/types1to3_output_files/[batch_dfn,.,-1]_t1to3.set','-struct','tmp');
 
 %%SELECT THE TYPE-4 TYPE-5 & TYPE-6 TIME PERIODS IN THE DATA SET... 
 tmp.EEG=pop_marks_select_data(EEG,'time marks',[],'labels',{'type-4','type-5','types-6'},'gui','off');
 
 %%SAVE *t1to3.set FILE...
-EEG=pop_saveset(tmp.EEG,'filename','[batch_dfn,.,-1]_t4to6.set','filepath','analysis/data/types4to6_output_files');
+save('analysis/data/types4to6_output_files/[batch_dfn,.,-1]_t4to6.set','-struct','tmp');
 
