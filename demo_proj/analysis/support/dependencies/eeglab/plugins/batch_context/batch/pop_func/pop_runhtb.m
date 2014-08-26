@@ -205,11 +205,23 @@ if ischar(BatchFName)
     BatchFName=cellstr(BatchFName);
 end
 
-
+if length(HistFName)~=length(BATCH_CONFIG);
+    disp('The number of history scripts does not match the number of batch configurations...');
+    if length(BATCH_CONFIG)==1;
+        disp('The single batch configuration will be used for executing all of the history scripts...');
+    else
+        disp('cannot resolve the history script and batch configuration pairing... doing nothing...');
+        return
+    end
+end
 %% START BATCHING PROCEDURE...
 for hi=1:length(HistFName)
     %% DO FOR EACH HISTORY FILES FILE...
-    job_struct.batch_config=BATCH_CONFIG(hi);
+    if length(BATCH_CONFIG)==1;
+        job_struct.batch_config=BATCH_CONFIG;
+    else
+        job_struct.batch_config=BATCH_CONFIG(hi);
+    end
     job_struct.context_config=CONTEXT_CONFIG;
     job_struct.submeth=rsub_meth;
     job_struct.batch_dfn=BatchFName;
@@ -304,7 +316,7 @@ for hi=1:length(HistFName)
     %% BUILD THE .M FILES IN THE LOG PATH...
     job_struct=ef_gen_m(job_struct);
     
-    switch BATCH_CONFIG(hi).exec_func
+    switch job_struct.batch_config.exec_func
         case 'ef_current_base'
         %% EXECUTE HTB SCRIPTS IN CURRENT MATLAB BASE...
             job_struct=ef_current_base(job_struct);        
@@ -780,7 +792,7 @@ for hi=1:length(HistFName)
             end
     end    
     %% EXECUTE/SUBMIT JOBS...
-    if ~strcmp(BATCH_CONFIG(hi).exec_func,'ef_current_base');
+    if ~strcmp(job_struct.batch_config.exec_func,'ef_current_base');
         switch rsub_meth
             case 'system'
                 %disp('''system'' submission is not programmed yet... doing nothing.');
